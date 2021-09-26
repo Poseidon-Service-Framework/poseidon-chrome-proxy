@@ -1,120 +1,34 @@
-const bg = chrome.extension.getBackgroundPage()
-const head = chrome.webRequest
+layui.use('code', function(){ //加载code模块
+    layui.code({
+        title:'代理规则配置'
+    }); //引用code方法
+});
 
-let addBtn = document.getElementById('add');
-let listDev = document.getElementById('listItem');
-let qqBtn = document.getElementById('qqBtn');
-let ymBtn = document.getElementById('ym');
-let siteInput = document.getElementById('site');
-
-var proxyList = [];
-addBtn.onclick = addItem;
-qqBtn.onclick = save;
-ymBtn.onclick = onOffEnvent;
-
-window.onload = function() {
-	var list = bg.getValue('RatelHttpProxy');
-	var onOff = bg.getValue('RatelHttpProxy-onOff');
-	var url = bg.getValue('RatelHttpProxy-url');
-	ymBtn.checked = onOff == "true";
-	siteInput.value = url;
-	
-	console.log(JSON.stringify(list))
-	console.log(JSON.stringify(onOff))
-	if (list == null || list.length == 0) {
-		addItem();
-		bg.setJob(String(function FindProxyForURL(url, host) {
-			return 'DIRECT'
-		}))
-	} else {
-		// bg.proxyList =  eval('(' + list + ')');
-		bg.proxyList = JSON.parse(list)
-		reload();
-		bindDelEnvent();
-		bg.setJob(convertJsonStr(bg.proxyList))
-	}
+//加载ide
+function myload(){
+    var codediv = document.getElementsByClassName("layui-code-ol");
+    codediv[0].setAttribute("contenteditable","true");
 }
 
-function bindDelEnvent() {
-	var listItem = document.getElementsByName('delBtn');
-	for (var i = 0; i < listItem.length; i++) {
-		listItem[i].onclick = removeItem;
-	}
+//获得用户输入的json串
+function getCodeJson(){
+    var codediv = document.getElementsByClassName("layui-code-ol");
+    var codelist = codediv[0].children;
+    var json = "";
+    for (var i = 0; i < codelist.length; i++){
+        json += codelist[i].innerHTML;
+    }
+    return json;
 }
 
-function addItem() {
-	refushList()
-	bg.proxyList.push({
-		'source': '',
-		'target': ''
-	});
-	reload();
-	bindDelEnvent();
+//启动代理
+function stratUpProxy(){
+    var json = getCodeJson();
+    var obj = JSON.parse(json);
+    alert(obj.domain)
 }
 
 
-function removeItem(i) {
-	refushList();
-	bg.proxyList.splice(this.value, 1);
-	reload();
-	bindDelEnvent();
-}
-
-function reload() {
-	var str = "";
-	for (var i = 0; i < bg.proxyList.length; i++) {
-		str +=
-			`<input type="text" class='in1' name='item' value='${bg.proxyList[i].source}'/>
-				<input type="text" class='in1' name='item' value='${bg.proxyList[i].target}'/>
-				<button class='l1' id='del' name='delBtn' value='${i}'> - </button>`
-	}
-	listDev.innerHTML = str;
-}
-
-function save() {
-	refushList();
-	bg.setValue('RatelHttpProxy', JSON.stringify(bg.proxyList));
-	bg.setValue('RatelHttpProxy-url', siteInput.value);
-	bg.setJob(convertJsonStr(bg.proxyList));
-}
-
-function refushList() {
-	var listItem = document.getElementsByName('item');
-	var tempList = [];
-	for (var i = 0; i < listItem.length; i += 2) {
-		var item = {
-			'source': '',
-			'target': ''
-		};
-		item.source = listItem[i].value;
-		item.target = listItem[i + 1].value;
-		tempList.push(item);
-	}
-	bg.proxyList = tempList;
-}
-
-function convertJsonStr(obj) {
-	var jsonStr = JSON.stringify(obj)
-	var onOff = bg.getValue('RatelHttpProxy-onOff');
-	var flag = siteInput.value != '';
-	return `function FindProxyForURL(url, host) {
-		if(${onOff}){
-			var list = JSON.parse('${jsonStr}');
-			if(${flag} && !~url.indexOf('${siteInput.value}')){
-				return 'DIRECT'
-			}
-			for (var i = 0; i < list.length; i++) {
-				if (~url.indexOf(list[i].source)) {
-					return 'PROXY '+ list[i].target +'; DIRECT'
-				}
-			}
-		}
-		return 'DIRECT'
-	}`
-}
-
-
-function onOffEnvent(){
-	bg.setValue('RatelHttpProxy-onOff',this.checked);
-	bg.setJob(convertJsonStr(bg.proxyList))
-}
+//加载事件
+window.addEventListener('load',myload,false);
+document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);

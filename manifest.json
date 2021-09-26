@@ -1,12 +1,12 @@
 {
     "manifest_version": 2,
     "name": "poseidon-proxy",
-    "version": "1.0.1",
+    "version": "2.0.1",
     "description": "https://github.com/muggle0",
     "icons": {
-        "16": "factory.jpg",
-        "48": "factory.jpg",
-        "128": "factory.jpg"
+        "16": "factory.png",
+        "48": "factory.png",
+        "128": "factory.png"
     },
     "browser_action": {
         "default_title": "poseidon-proxy",

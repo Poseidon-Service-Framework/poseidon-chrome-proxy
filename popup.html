@@ -5,145 +5,48 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Document</title>
+		<link rel="stylesheet" href="assets/css/layui.css">
 	</head>
-	<body  style="margin: 10px 0px;padding: 0px;background-image: url(bg1.jpg)">
+	<body  style="margin: 5px 5px;padding: 0px;background-color: white">
 		<div id="app">
-            <h2>poseidon-proxy</h2>
-			  <div class="app1">
-			      <span class='a1'>开 关</span>
-			      <input type="checkbox" id="ym" class="chooseBtn"/>
-			      <label for="ym" class="choose-label a2">
-				  </label>
-			    </div>
-				域 名 <input type="text" class='in1' style="width: auto" name='site' id="site"/>
-			<div class='app1'>
-				<button class='btn1' id='add'> 添 加 </button>
-				<button class='btn1' style='margin: 7px;' id='qqBtn'>保 存</button>
-				<div id="app2">
-					<div style="width: 280px;text-align: center;margin: 0 auto;">
-						<div style="width: 50%;text-align: center; float: left;">匹配路径</div>
-						<div style="width: 50%;text-align: center;float: left;">目标路径</div>
-					</div>
-					<div id="listItem">
-					</div>
+			<h1 id="title" style="background-color: skyblue">poseidon-proxy</h1>
+			<form class="layui-form">
+				<pre class="layui-code">
+					{
+						"domain":["www.baidu.com"],
+						"matchingRules":[{
+						"route":"/xxx",
+						"requestHeader":["contextType:json","token:qqq"],
+						"targetUrl":"127.0.0.1:8080"
+						}]
+					}
+				</pre>
+				<div style="text-align: center">
+					<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>
 				</div>
-			</div>
-		</div>
+			</form>
 		</div>
 	</body>
 
-	<script type="text/javascript" src="./popup.js"></script>
+	<script src="assets/layui.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+	<script src="assets/json2.js"></script>
 	<style>
+		h1{
+			text-align: center;
+		}
 		#app {
 			width: 370px;
 			/* height: 65px; */
-			text-align: center;
-			line-height: 30px;
 			-webkit-user-select: none;
 			/*webkit浏览器*/
 			user-select: none;
 		}
-
-		.a1,
-		.a2 {
-			vertical-align: middle;
-			margin: 0 5px;
+		#title {
+			margin-bottom: 10px;
 		}
-
-		.l1 {
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			background-color: orange; /* Green */
-			color: white;
-			outline:none;
-			display: inline-block;
-			text-align: center;
-			text-decoration: none;
-			color: #fff;
-			background-color: orange;
-			box-shadow: 0 3px #999;
-			font-size: 16px;
-		}
-
-		.btn1 {
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			background-color: orange; /* Green */
-			color: white;
-			outline:none;
-			display: inline-block;
-			text-align: center;
-			text-decoration: none;
-			color: #fff;
-			background-color: orange;
-			box-shadow: 0 3px #999;
-			font-size: 16px;
-		}
-		.l1:hover {
-			background-color: orangered;
-		}
-		.l1:active {
-			transform: translateY(2px);
-		}
-		.btn1:hover {
-			background-color: orangered
-		}
-
-		.btn1:active {
-			transform: translateY(2px);
-		}
-
-
-		.in1 {
-
-			padding: 2px ;
-			border-radius: 4px;
-			cursor: pointer;
-			width: 130px;
-		}
-
-		.chooseBtn {
-			display: none;
-		}
-
-		.choose-label {
-			box-shadow: #ccc 0px 0px 0px 1px;
-			width: 30px;
-			/*长条长度*/
-			height: 15px;
-			/*长条高度*/
-			display: inline-block;
-			border-radius: 20px;
-			position: relative;
-			background-color: #bdbdbd;
-			overflow: hidden;
-		}
-
-		/*小圆点*/
-		.choose-label:before {
-			content: '';
-			position: absolute;
-			left: 0;
-			width: 15px;
-			/*圆点半径*/
-			height: 15px;
-			/*圆点半径*/
-			display: inline-block;
-			border-radius: 10px;
-			background-color: #fff;
-			z-index: 20;
-			-webkit-transition: all 0.28s;
-			transition: all 0.28s;
-		}
-
-		.chooseBtn:checked+label.choose-label:before {
-			left: 15px;
-		}
-
-		.chooseBtn:checked+label.choose-label {
-			background-color: #3CB371;
+		.layui-code-ol:focus{
+			outline: none;
 		}
 	</style>
 
