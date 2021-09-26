@@ -1,0 +1,32 @@
+{
+    "manifest_version": 2,
+    "name": "poseidon-proxy",
+    "version": "1.0.1",
+    "description": "https://github.com/muggle0",
+    "icons": {
+        "16": "factory.jpg",
+        "48": "factory.jpg",
+        "128": "factory.jpg"
+    },
+    "browser_action": {
+        "default_title": "poseidon-proxy",
+        "default_popup": "./popup.html"
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>",
+        "contextMenus",
+        "tabs",
+        "cookies",
+        "proxy",
+        "declarativeContent",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
+}
