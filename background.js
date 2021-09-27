@@ -4,7 +4,8 @@ chrome.proxy.settings.set({
 		pacScript: {
 			data: String(function FindProxyForURL(url, host) {
 				var onoff = localStorage.getItem("poseidon_onoff");
-				console.log(onoff)
+				console.log("onoff")
+				debugger
 				if(onoff){
 					var proxyList = localStorage.getItem("proxy_list");
 					var proxy;
