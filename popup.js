@@ -1,3 +1,6 @@
+//常量
+const bg = chrome.extension.getBackgroundPage();
+
 //加载事件
 window.addEventListener('load',myload,false);
 document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
@@ -64,11 +67,33 @@ function stratUpProxy(){
         }
         setValue("proxyUrl",url);
         setValue("detailedUrl",detailedUrl);
+        var data = String(function FindProxyForURL(url, host) {
+            var onoff = localStorage.getItem("poseidon_onoff");
+            console.log(onoff)
+            debugger;
+            if(onoff){
+                var proxyList = localStorage.getItem("proxy_list");
+                var proxy;
+                for (var i = 0; i < proxyList.length; i++) {
+                    if (proxyList[i].host==host&& ~url.indexOf(proxyList[i].perfix) ){
+                        proxy=proxyList[i]
+                    }
+                }
+                if (proxy==null){
+                    return 'DIRECT'
+                }else {
+                    return 'PROXY '+proxy.target+'; DIRECT'
+                }
+            }
+            return 'DIRECT'
+        });
+        bg.setProxy(data)
         layer.alert("启用成功")
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
         document.getElementById("closedUpProxy").addEventListener('click',closedUpProxy);
     }catch (error){
         layer.alert("启用失败,请检查json语法");
+        console.log(error)
     }
 
 }
