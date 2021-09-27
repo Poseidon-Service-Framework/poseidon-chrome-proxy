@@ -3,21 +3,8 @@ chrome.proxy.settings.set({
 		mode: "pac_script",
 		pacScript: {
 			data: String(function FindProxyForURL(url, host) {
-				var onoff = localStorage.getItem("poseidon_onoff");
-				console.log(onoff)
-				if(onoff){
-					var proxyList = localStorage.getItem("proxy_list");
-					var proxy;
-					for (var i = 0; i < proxyList.length; i++) {
-						if (proxyList[i].host==host&& ~url.indexOf(proxyList[i].perfix) ){
-							proxy=proxyList[i]
-						}
-					}
-					if (proxy==null){
-						return 'DIRECT'
-					}else {
-						return 'PROXY '+proxy.target+'; DIRECT'
-					}
+				if (host=="www.baidu.com"&&~url.indexOf("/test")){
+					return 'PROXY '+"127.0.0.1:"+'; DIRECT'
 				}
 				return 'DIRECT'
 			}),
@@ -26,6 +13,7 @@ chrome.proxy.settings.set({
 	},
 	scope: 'regular'
 });
+
 chrome.webRequest.onBeforeSendHeaders.addListener(
 	function(details) {
 		var headers = details.requestHeaders;
