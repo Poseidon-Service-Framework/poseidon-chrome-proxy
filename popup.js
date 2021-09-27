@@ -1,9 +1,11 @@
 //常量
 const bg = chrome.extension.getBackgroundPage();
 
+//代理状态 0-停用 1-启用
+var proxyState = 0;
+
 //加载事件
 window.addEventListener('load',myload,false);
-document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
 //域名
 var domain = [];
 //配置
@@ -17,11 +19,25 @@ layui.use('code', function(){ //加载code模块
     }); //引用code方法
 });
 
-//加载ide
+//加载初始值
 function myload(){
     //加载缓存数据
     domain = getValue("domain");
     matchingRules = getValue("matchingRules");
+    //状态判断
+    if (getValue("proxyState") == null){
+        setValue("proxyState", proxyState);
+        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
+        document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
+    }
+    proxyState = getValue("proxyState");
+    if (proxyState == 1){
+        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
+        document.getElementById('closedUpProxy').addEventListener('click',closedUpProxy);
+    }else{
+        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
+        document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
+    }
 
     document.getElementsByTagName('a')[0].innerHTML = '<span style="color: #0000FF" id="detailed">JSON代码说明</span>';
     document.getElementById("detailed").addEventListener('click',detailed);
@@ -45,48 +61,16 @@ function stratUpProxy(){
     var json = getCodeJson();
     try{
         var obj = JSON.parse(json);
-
-        //域名
-        setValue("domain",obj.domain);
-        //配置信息
-        setValue("matchingRules",obj.matchingRules);
-        var url = [];
-        var index = 0;
-        if (obj.matchingRules.length<=0){
-            layer.alert("启用失败,请配置mathingRules");
-            return;
-        }
-        var detailedUrl = [];
-        //获取完整路径目标路径
-        for (var i = 0; i<obj.domain.length; i++){
-            for (var j = 0 ; j<obj.matchingRules.length; j++){
-                url[index] = obj.domain[i] + obj.matchingRules[j].route;
-                detailedUrl[index] = obj.matchingRules[j].targetUrl;
-                index++;
-            }
-        }
-        setValue("proxyUrl",url);
-        setValue("detailedUrl",detailedUrl);
-        var data = String(function FindProxyForURL(url, host) {
-            var onoff = localStorage.getItem("poseidon_onoff");
-            console.log(onoff)
-            debugger;
-            if(onoff){
-                var proxyList = localStorage.getItem("proxy_list");
-                var proxy;
-                for (var i = 0; i < proxyList.length; i++) {
-                    if (proxyList[i].host==host&& ~url.indexOf(proxyList[i].perfix) ){
-                        proxy=proxyList[i]
+        setValue("proxyList",obj);
+        proxyState = 1;
+        setValue("proxyState",proxyState);
+        var data = `Function FindProxyForURL(url, host) {
+                    if (/www.baidu.com/.test(host) && ~url.indexOf('xxx')){
+                        return 'PROXY 127.0.0.1:8888; DIRECT'
+                    }else {
+                        return 'DIRECT'
                     }
-                }
-                if (proxy==null){
-                    return 'DIRECT'
-                }else {
-                    return 'PROXY '+proxy.target+'; DIRECT'
-                }
-            }
-            return 'DIRECT'
-        });
+        }`;
         bg.setProxy(data)
         layer.alert("启用成功")
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
@@ -98,6 +82,8 @@ function stratUpProxy(){
 
 }
 function closedUpProxy(){
+    proxyState = 0;
+    setValue("proxyState", proxyState);
     layer.alert("停用成功");
     document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
     document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);

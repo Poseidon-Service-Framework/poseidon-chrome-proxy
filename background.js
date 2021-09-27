@@ -1,4 +1,5 @@
 function setProxy (data){
+	alert(data)
 	chrome.proxy.settings.set({
 		value: {
 			mode: "pac_script",
