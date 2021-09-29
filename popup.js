@@ -1,6 +1,7 @@
 //加载事件
 window.addEventListener('load', myload, false);
 window.addEventListener('unload', save, false);
+const bg = chrome.extension.getBackgroundPage();
 //域名
 var domain = [];
 //配置
@@ -15,10 +16,12 @@ layui.use('code', function () { //加载code模块
 });
 
 //加载初始值
-function myload() {
+async function myload() {
     //加载缓存数据
     //状态判断
-    if (getValue("proxyState") == 1) {
+    const {proxyState} = await bg.getValue("proxyState");
+    if (proxyState == 1) {
+
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
         document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
     } else {
@@ -44,13 +47,14 @@ function getCodeJson() {
 }
 
 
-function loadJson() {
+async function loadJson() {
     var codediv = document.getElementsByClassName("layui-code-ol");
     var codelist = codediv[0].children;
-    var proxyJson = getValue("proxyJson");
+    const {proxyJson} = await bg.getValue("proxyJson");
     if (proxyJson == null) {
         codelist[0].innerHTML = "[{\n" +
             "    \"domain\":\"www.baidu.com\",\n" +
+            "    \"mandatory\":true,\n" +
             "    \"matchingRules\":[{\n" +
             "        \"route\":\"/xxx\",\n" +
             "        \"requestHeader\":[\"contextType:json\",\"token:qqq\"],\n" +
@@ -63,40 +67,37 @@ function loadJson() {
 }
 
 //更新代理
-function stratUpProxy() {
+async function stratUpProxy() {
     try {
-        setValue("proxyState", 1);
+        await bg.setValue({"proxyState": 1});
+        await bg.setValue({"proxyJson": getCodeJson()});
         setProxy();
         layer.alert("启用成功")
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
+        document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
     } catch (error) {
         layer.alert("启用失败,请检查json语法");
         console.log(error)
     }
-
 }
 
 function save() {
     var codeJson = getCodeJson();
-    setValue("proxyJson", codeJson);
-    setProxy()
+    bg.setValue({"proxyJson": codeJson});
 }
 
-function closedUpProxy() {
-    setValue("proxyState", 0);
+async function closedUpProxy() {
+    await bg.setValue({"proxyState": 0});
     setProxy();
     layer.alert("停用成功");
-    document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="updateProxy">启用代理</button>';
+    document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
+    document.getElementById('stratUpProxy').addEventListener('click', stratUpProxy);
 }
 
 //缓存操作
-function setValue(key, value) {
-    localStorage.setItem(key, value)
-}
 
-function getValue(key) {
-    return localStorage.getItem(key);
-}
+
+
 
 //详细展示
 function detailed() {
@@ -116,42 +117,4 @@ function detailed() {
     });
 }
 
-
-function setProxy() {
-    var pacScr;
-    if (getValue('proxyState') == 1) {
-        var proxyJson = getValue("proxyJson");
-        pacScr='function FindProxyForURL(url, host) { return \'PROXY 127.0.0.1:9020; DIRECT\';}'
-        proxyJson
-    }else {
-        pacScr = 'function FindProxyForURL(url, host) { return \'DIRECT\';}';
-    }
-    chrome.proxy.settings.set({
-        value: {
-            mode: "pac_script",
-            pacScript: {
-                data: pacScr,
-                mandatory: true,
-            }
-        },
-        scope: 'regular'
-    }, function () {
-    });
-}
-
-
-function setHeader(headerObj) {
-    chrome.webRequest.onBeforeSendHeaders.addListener(
-        function (details) {
-            var headers = details.requestHeaders;
-            headers.push({
-                name: 'x-tif-uid',
-                value: '755150713268621312'
-            });
-            return {requestHeaders: details.requestHeaders};
-        },
-        {urls: ["http://ipcrio-dev-121.pdcts.com.cn/!*"]},
-        ["blocking", "requestHeaders"]
-    );
-}
 

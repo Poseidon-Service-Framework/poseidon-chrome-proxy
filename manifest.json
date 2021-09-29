@@ -15,17 +15,14 @@
     "permissions": [
         "webRequest",
         "webRequestBlocking",
-        "<all_urls>",
-        "contextMenus",
-        "tabs",
-        "cookies",
         "proxy",
-        "declarativeContent",
-        "http://*/*",
-        "https://*/*"
+        "storage",
+        "cookies",
+        "<all_urls>"
     ],
     "background": {
         "scripts": [
+            "background.js"
         ]
     }
 }
