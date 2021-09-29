@@ -1,69 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Document</title>
-		<link rel="stylesheet" href="assets/css/layui.css">
-	</head>
-	<body  style="margin: 5px 5px;padding: 0px;background-color: white">
-		<div id="app">
-			<h1 id="title" style="background-color: skyblue">poseidon-proxy</h1>
-			<form class="layui-form">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<link rel="stylesheet" href="assets/css/layui.css">
+</head>
+<body  style="margin: 5px 5px;padding: 0px;background-color: white">
+<div id="app">
+	<h1 id="title" style="background-color: skyblue">poseidon-proxy</h1>
+	<form class="layui-form">
 				<pre class="layui-code">
-					[{
-						"domain":"www.baidu.com",
-						"matchingRules":[{
-						"route":"/xxx",
-						"requestHeader":["contextType:json","token:qqq"],
-						"targetUrl":"127.0.0.1:8080"
-						}]
-					}]
+
 				</pre>
-				<div style="text-align: center" id="buttonStyle">
+		<div style="text-align: center" id="buttonStyle">
 
-				</div>
-			</form>
 		</div>
-	</body>
 
-	<script src="assets/layui.js"></script>
-	<script type="text/javascript" src="popup.js"></script>
-	<style>
-		h1{
-			text-align: center;
-		}
-		#app {
-			width: 500px;
-			height: 500px;
-			/* height: 65px; */
-			-webkit-user-select: none;
-			/*webkit浏览器*/
-			user-select: none;
-		}
-		#title {
-			margin-bottom: 10px;
-		}
-		.layui-code-ol:focus{
-			outline: none;
-		}
-		.layui-layer-demo{
-			width: 400px;
-			height: 240px;
-		}
-		.layui-layer-content{
-			white-space: pre;
-			font-size: 16px;
-		}
-		.layui-layer-title{
-			padding: 0px;
-			margin: 0px;
-			font-size: 18px;
-			background-color: skyblue;
-			text-align: center;
-		}
-	</style>
+	</form>
+</div>
+</body>
+
+<script src="assets/layui.js"></script>
+<script type="text/javascript" src="popup.js"></script>
+<style>
+	h1{
+		text-align: center;
+	}
+	#app {
+		width: 500px;
+		height: 500px;
+		/* height: 65px; */
+		-webkit-user-select: none;
+		/*webkit浏览器*/
+		user-select: none;
+	}
+	#title {
+		margin-bottom: 10px;
+	}
+	.layui-code-ol:focus{
+		outline: none;
+	}
+	.layui-layer-demo{
+		width: 400px;
+		height: 240px;
+	}
+	.layui-layer-content{
+		white-space: pre;
+		font-size: 16px;
+	}
+	.layui-layer-title{
+		padding: 0px;
+		margin: 0px;
+		font-size: 18px;
+		background-color: skyblue;
+		text-align: center;
+	}
+</style>
 
 
 
