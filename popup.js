@@ -1,9 +1,3 @@
-//常量
-const bg = chrome.extension.getBackgroundPage();
-
-//代理状态 0-停用 1-启用
-var proxyState = 0;
-
 //加载事件
 window.addEventListener('load',myload,false);
 //域名
@@ -25,20 +19,13 @@ function myload(){
     domain = getValue("domain");
     matchingRules = getValue("matchingRules");
     //状态判断
-    if (getValue("proxyState") == null){
-        setValue("proxyState", proxyState);
-        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
-        document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
-    }
-    proxyState = getValue("proxyState");
-    if (proxyState == 1){
+    if (getValue("proxyState") == 1) {
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
-        document.getElementById('closedUpProxy').addEventListener('click',closedUpProxy);
-    }else{
+        document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
+    }else(getValue("proxyState") == null){
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
         document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
     }
-
     document.getElementsByTagName('a')[0].innerHTML = '<span style="color: #0000FF" id="detailed">JSON代码说明</span>';
     document.getElementById("detailed").addEventListener('click',detailed);
     var codediv = document.getElementsByClassName("layui-code-ol");
@@ -59,19 +46,10 @@ function getCodeJson(){
 //启动代理
 function stratUpProxy(){
     var json = getCodeJson();
+    setValue("proxyJson",json);
     try{
         var obj = JSON.parse(json);
-        setValue("proxyList",obj);
-        proxyState = 1;
-        setValue("proxyState",proxyState);
-        var data = `Function FindProxyForURL(url, host) {
-                    if (/www.baidu.com/.test(host) && ~url.indexOf('xxx')){
-                        return 'PROXY 127.0.0.1:8888; DIRECT'
-                    }else {
-                        return 'DIRECT'
-                    }
-        }`;
-        bg.setProxy(data)
+        setValue("proxyState",1);
         layer.alert("启用成功")
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
         document.getElementById("closedUpProxy").addEventListener('click',closedUpProxy);
@@ -82,8 +60,7 @@ function stratUpProxy(){
 
 }
 function closedUpProxy(){
-    proxyState = 0;
-    setValue("proxyState", proxyState);
+    setValue("proxyState", 0);
     layer.alert("停用成功");
     document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
     document.getElementById('stratUpProxy').addEventListener('click',stratUpProxy);
@@ -91,10 +68,10 @@ function closedUpProxy(){
 
 //缓存操作
 function setValue(key,value){
-    localStorage.setItem(key,value)
+    bg.localStorage.setItem(key,value)
 }
 function getValue(key){
-    return localStorage.getItem(key);
+    return bg.localStorage.getItem(key);
 }
 
 //详细展示
