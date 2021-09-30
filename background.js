@@ -21,12 +21,6 @@ async function setHeaders() {
         ["requestHeaders", "blocking"]
     );
 }
-
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-    setProxy();
-    setHeaders();
-});
-
 async function setValue(data) {
     return new Promise((resolve, reject) => {
         chrome.storage.local.set(data, () => {
@@ -54,11 +48,12 @@ async function getValue(key) {
 
 async function setProxy() {
     var pacScr = `function FindProxyForURL(url, host) { `
-    const proxyJson = await getValue("proxyJson");
+    const {proxyJson} = await getValue("proxyJson");
     const {proxyState} = await getValue("proxyState");
+    var proxyObj = JSON.parse(proxyJson);
     if (proxyState == 1) {
-        for (var i = 0; i < proxyJson.length; i++) {
-            var json = proxyJson[i]
+        for (var i = 0; i < proxyObj.length; i++) {
+            var json = proxyObj[i]
             pacScr = pacScr.concat(`if('${json.domain}'==host){`);
             for (var j = 0; j < json.matchingRules.length; j++) {
                 var matchingRule = json.matchingRules[j];
@@ -85,6 +80,12 @@ async function setProxy() {
         scope: 'regular'
     }, function () {
     });
+    console.log("设置代理"+pacScr);
 }
 
 
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    console.log(">>>>>>>>>>>>>>>>> 监听")
+    setProxy();
+    // setHeaders();
+});

@@ -54,7 +54,6 @@ async function loadJson() {
     if (proxyJson == null) {
         codelist[0].innerHTML = "[{\n" +
             "    \"domain\":\"www.baidu.com\",\n" +
-            "    \"mandatory\":true,\n" +
             "    \"matchingRules\":[{\n" +
             "        \"route\":\"/xxx\",\n" +
             "        \"requestHeader\":[\"contextType:json\",\"token:qqq\"],\n" +
@@ -71,10 +70,12 @@ async function stratUpProxy() {
     try {
         await bg.setValue({"proxyState": 1});
         await bg.setValue({"proxyJson": getCodeJson()});
-        setProxy();
-        layer.alert("启用成功")
-        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
-        document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
+        bg.setProxy().then(()=>{
+            layer.alert("启用成功")
+            document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
+            document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
+        });
+
     } catch (error) {
         layer.alert("启用失败,请检查json语法");
         console.log(error)
@@ -88,10 +89,12 @@ function save() {
 
 async function closedUpProxy() {
     await bg.setValue({"proxyState": 0});
-    setProxy();
-    layer.alert("停用成功");
-    document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
-    document.getElementById('stratUpProxy').addEventListener('click', stratUpProxy);
+    bg.setProxy().then(()=>{
+        layer.alert("停用成功");
+        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
+        document.getElementById('stratUpProxy').addEventListener('click', stratUpProxy);
+    })
+
 }
 
 //缓存操作
