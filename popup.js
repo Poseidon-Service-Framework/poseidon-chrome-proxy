@@ -70,11 +70,9 @@ async function stratUpProxy() {
     try {
         await bg.setValue({"proxyState": 1});
         await bg.setValue({"proxyJson": getCodeJson()});
-        bg.setProxy().then(()=>{
-            layer.alert("启用成功")
-            document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
-            document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
-        });
+        layer.alert("启用成功")
+        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
+        document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
 
     } catch (error) {
         layer.alert("启用失败,请检查json语法");
@@ -89,12 +87,9 @@ function save() {
 
 async function closedUpProxy() {
     await bg.setValue({"proxyState": 0});
-    bg.setProxy().then(()=>{
-        layer.alert("停用成功");
-        document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
-        document.getElementById('stratUpProxy').addEventListener('click', stratUpProxy);
-    })
-
+    layer.alert("停用成功");
+    document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn-normal" style="margin-top: 10px" id="stratUpProxy">启用代理</button>';
+    document.getElementById('stratUpProxy').addEventListener('click', stratUpProxy);
 }
 
 //缓存操作

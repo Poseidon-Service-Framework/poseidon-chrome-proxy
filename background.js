@@ -80,12 +80,12 @@ async function setProxy() {
         scope: 'regular'
     }, function () {
     });
-    console.log("设置代理"+pacScr);
+    console.log("设置代理："+pacScr);
 }
 
 
 chrome.storage.onChanged.addListener(function(changes, namespace) {
-    console.log(">>>>>>>>>>>>>>>>> 监听")
+    console.log("监听配置改变更新代理")
     setProxy();
     // setHeaders();
 });
