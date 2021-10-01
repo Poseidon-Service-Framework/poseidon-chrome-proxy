@@ -1,10 +1,8 @@
 async function setHeaders() {
-    console.log("设置请求头》》》》")
     const {proxyJson} = await getValue("proxyJson");
     const {proxyState} = await getValue("proxyState");
     var proxyObj = JSON.parse(proxyJson);
     if (proxyState == 1) {
-        console.log(proxyObj[0].requestHeader[0].split(":")[1])
         chrome.webRequest.onBeforeSendHeaders.addListener(
             function (details) {
                 var headers = details.requestHeaders;
@@ -92,7 +90,6 @@ async function setProxy() {
     });
     console.log("设置代理：" + pacScr);
 }
-
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
     console.log("监听配置改变更新代理")
