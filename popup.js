@@ -52,14 +52,23 @@ async function loadJson() {
     var codelist = codediv[0].children;
     const {proxyJson} = await bg.getValue("proxyJson");
     if (proxyJson == null) {
-        codelist[0].innerHTML = "[{\n" +
-            "    \"domain\":\"www.baidu.com\",\n" +
-            "    \"matchingRules\":[{\n" +
-            "        \"route\":\"/xxx\",\n" +
-            "        \"requestHeader\":[\"contextType:json\",\"token:qqq\"],\n" +
-            "        \"targetUrl\":\"127.0.0.1:8080\"\n" +
-            "    }]\n" +
-            "}]"
+        codelist[0].innerHTML = "[\n" +
+            "  {\n" +
+            "    \"domain\": \"dev.100yx.net\",\n" +
+            "    \"requestHeader\": [\n" +
+            "      {\n" +
+            "        \"name\": \"test\",\n" +
+            "        \"value\": \">>>>>>>>>>\"\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"matchingRules\": [\n" +
+            "      {\n" +
+            "        \"route\": \"/message/msgApi\",\n" +
+            "        \"targetUrl\": \"127.0.0.1:9020\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "]"
     } else {
         codelist[0].innerHTML = proxyJson;
     }

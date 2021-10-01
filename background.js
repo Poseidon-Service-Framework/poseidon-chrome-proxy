@@ -1,26 +1,36 @@
 async function setHeaders() {
-    const proxyJson = await getValue("proxyJson");
+    console.log("设置请求头》》》》")
+    const {proxyJson} = await getValue("proxyJson");
     const {proxyState} = await getValue("proxyState");
-    var reqUrls=""
-    if (proxyJson==1){
-        reqUrls="<all_urls>";
+    var proxyObj = JSON.parse(proxyJson);
+    console.log(">>>>>>>"+proxyObj[0].requestHeader[0])
+    if (proxyState == 1) {
+        chrome.webRequest.onBeforeSendHeaders.addListener(
+            function (details) {
+                var headers = details.requestHeaders;
+                // var targetUrl=details.url;
+                headers.push({
+                    name: "xxxxx",
+                    value: proxyObj[0].requestHeader[0]
+                });
+                for (var i = 0; i < proxyObj.length; i++) {
+                    var json = proxyObj[i]
+                    for(var j=1;j<json.requestHeader;j++){
+                    }
+                }
+                return {
+                    requestHeaders: details.requestHeaders,
+                }
+            },
+            {urls: ["<all_urls>"]},
+            ["requestHeaders", "blocking"]
+        );
+    }else {
+        console.log("代理关闭，忽略请求头设置");
     }
-    chrome.webRequest.onBeforeSendHeaders.addListener(
-        function (details) {
-            //todo
-            var headers = details.requestHeaders;
-            headers.push({
-                name: 'xxx',
-                value: 'xxxxxxxxxxxxxxxxx'
-            });
-            return {
-                requestHeaders: details.requestHeaders,
-            }
-        },
-        {urls: [reqUrls]},
-        ["requestHeaders", "blocking"]
-    );
+
 }
+
 async function setValue(data) {
     return new Promise((resolve, reject) => {
         chrome.storage.local.set(data, () => {
@@ -74,18 +84,18 @@ async function setProxy() {
             mode: "pac_script",
             pacScript: {
                 data: pacScr,
-                mandatory: false,
+                mandatory: true,
             }
         },
         scope: 'regular'
     }, function () {
     });
-    console.log("设置代理："+pacScr);
+    console.log("设置代理：" + pacScr);
 }
 
 
-chrome.storage.onChanged.addListener(function(changes, namespace) {
+chrome.storage.onChanged.addListener(function (changes, namespace) {
     console.log("监听配置改变更新代理")
     setProxy();
-    // setHeaders();
+    setHeaders();
 });
