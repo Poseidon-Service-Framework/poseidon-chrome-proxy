@@ -55,12 +55,7 @@ async function loadJson() {
         codelist[0].innerHTML = "[\n" +
             "  {\n" +
             "    \"domain\": \"dev.100yx.net\",\n" +
-            "    \"requestHeader\": [\n" +
-            "      {\n" +
-            "        \"name\": \"test\",\n" +
-            "        \"value\": \">>>>>>>>>>\"\n" +
-            "      }\n" +
-            "    ],\n" +
+            "    \"requestHeader\": [\"test:xxxxxxxxxx\"],\n" +
             "    \"matchingRules\": [\n" +
             "      {\n" +
             "        \"route\": \"/message/msgApi\",\n" +

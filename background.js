@@ -3,19 +3,18 @@ async function setHeaders() {
     const {proxyJson} = await getValue("proxyJson");
     const {proxyState} = await getValue("proxyState");
     var proxyObj = JSON.parse(proxyJson);
-    console.log(">>>>>>>"+proxyObj[0].requestHeader[0])
     if (proxyState == 1) {
         chrome.webRequest.onBeforeSendHeaders.addListener(
             function (details) {
                 var headers = details.requestHeaders;
-                // var targetUrl=details.url;
-                headers.push({
-                    name: "xxxxx",
-                    value: proxyObj[0].requestHeader[0]
-                });
+                var targetUrl = details.url;
                 for (var i = 0; i < proxyObj.length; i++) {
                     var json = proxyObj[i]
-                    for(var j=1;j<json.requestHeader;j++){
+                    if (targetUrl.indexOf(json.domain)!=-1){
+                        for(var j=0;j<json.requestHeader;j++){
+                            var arr = requestHeader[j].split(":");
+                            headers.push({name:arr[0],value:[1]});
+                        }
                     }
                 }
                 return {
