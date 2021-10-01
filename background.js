@@ -4,16 +4,17 @@ async function setHeaders() {
     const {proxyState} = await getValue("proxyState");
     var proxyObj = JSON.parse(proxyJson);
     if (proxyState == 1) {
+        console.log(proxyObj[0].requestHeader[0].split(":")[1])
         chrome.webRequest.onBeforeSendHeaders.addListener(
             function (details) {
                 var headers = details.requestHeaders;
                 var targetUrl = details.url;
                 for (var i = 0; i < proxyObj.length; i++) {
                     var json = proxyObj[i]
-                    if (targetUrl.indexOf(json.domain)!=-1){
-                        for(var j=0;j<json.requestHeader;j++){
-                            var arr = requestHeader[j].split(":");
-                            headers.push({name:arr[0],value:[1]});
+                    if (targetUrl.indexOf(json.domain) != -1) {
+                        for (var j = 0; j < json.requestHeader.length; j++) {
+                            var arr = json.requestHeader[j].split(":");
+                            headers.push({name: arr[0], value: arr[1]});
                         }
                     }
                 }
@@ -24,7 +25,7 @@ async function setHeaders() {
             {urls: ["<all_urls>"]},
             ["requestHeaders", "blocking"]
         );
-    }else {
+    } else {
         console.log("代理关闭，忽略请求头设置");
     }
 
