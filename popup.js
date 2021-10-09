@@ -21,7 +21,6 @@ async function myload() {
     //状态判断
     const {proxyState} = await bg.getValue("proxyState");
     if (proxyState == 1) {
-
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
         document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
     } else {
@@ -112,7 +111,7 @@ function detailed() {
         anim: 2,
         title: '说明',
         shadeClose: true, //开启遮罩关闭
-        content: '1.domain字段表示域名,可配置多个域名\r' +
+        content: '1.domain字段表示域名\r' +
             '2.route表示匹配路径,即拦截时的url为 domain+route\r' +
             '3.requestHeader表示请求头信息\r' +
             '4.targetUrl表示目标路径'
