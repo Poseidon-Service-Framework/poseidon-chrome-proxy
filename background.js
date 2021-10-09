@@ -12,6 +12,7 @@ async function setHeaders() {
                     if (targetUrl.indexOf(json.domain) != -1) {
                         for (var j = 0; j < json.requestHeader.length; j++) {
                             var arr = json.requestHeader[j].split(":");
+                            removeHead(headers,arr[0]);
                             headers.push({name: arr[0], value: arr[1]});
                         }
                     }
@@ -27,6 +28,14 @@ async function setHeaders() {
         console.log("代理关闭，忽略请求头设置");
     }
 
+}
+
+function removeHead(head,name){
+    for (var i = 0; i < head.length; i++) {
+        if (head[i].name==name){
+            head.splice(i,1);
+        }
+    }
 }
 
 async function setValue(data) {
