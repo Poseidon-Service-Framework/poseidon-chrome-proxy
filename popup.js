@@ -53,7 +53,7 @@ async function loadJson() {
     if (proxyJson == null) {
         codelist[0].innerHTML = "[\n" +
             "  {\n" +
-            "    \"domain\": \"dev.100yx.net\",\n" +
+            "    \"domain\": \"www.baidu.com\",\n" +
             "    \"requestHeader\": [\"test:xxxxxxxxxx\"],\n" +
             "    \"matchingRules\": [\n" +
             "      {\n" +
