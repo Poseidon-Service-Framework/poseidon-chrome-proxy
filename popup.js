@@ -54,7 +54,7 @@ async function loadJson() {
         codelist[0].innerHTML = "[\n" +
             "  {\n" +
             "    \"domain\": \"www.baidu.com\",\n" +
-            "    \"requestHeader\": [\"test:xxxxxxxxxx\"],\n" +
+            "    \"requestHeader\": [\"token:your_token\"],\n" +
             "    \"matchingRules\": [\n" +
             "      {\n" +
             "        \"route\": \"/message/msgApi\",\n" +
@@ -98,8 +98,6 @@ async function closedUpProxy() {
 //缓存操作
 
 
-
-
 //详细展示
 function detailed() {
     //自定页
@@ -111,10 +109,10 @@ function detailed() {
         anim: 2,
         title: '说明',
         shadeClose: true, //开启遮罩关闭
-        content: '1.domain字段表示域名\r' +
-            '2.route表示匹配路径,即拦截时的url为 domain+route\r' +
-            '3.requestHeader表示请求头信息\r' +
-            '4.targetUrl表示目标路径'
+        content: '1.domain: 需要代理的域名\r' +
+            '2.requestHeader: 需要设置的请求头信息\r' +
+            '3.route: 匹配路径,即拦截时的url为 http://domain+route\r' +
+            '4.targetUrl: 目标路径,即实际代理的ip与端口'
     });
 }
 
