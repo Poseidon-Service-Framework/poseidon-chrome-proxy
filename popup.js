@@ -19,6 +19,7 @@ layui.use('code', function () { //加载code模块
 async function myload() {
     //加载缓存数据
     //状态判断
+    document.getElementById("layui-code").addEventListener("paste",textInit);
     const {proxyState} = await bg.getValue("proxyState");
     if (proxyState == 1) {
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
@@ -42,6 +43,7 @@ function getCodeJson() {
     for (var i = 0; i < codelist.length; i++) {
         json += codelist[i].innerHTML;
     }
+    JSON.parse(json);
     return json;
 }
 
@@ -71,8 +73,8 @@ async function loadJson() {
 //更新代理
 async function stratUpProxy() {
     try {
-        await bg.setValue({"proxyState": 1});
         await bg.setValue({"proxyJson": getCodeJson()});
+        await bg.setValue({"proxyState": 1});
         layer.alert("启用成功")
         document.getElementById("buttonStyle").innerHTML = '<button type="button" class="layui-btn layui-btn layui-btn-danger" style="margin-top: 10px" id="closedUpProxy">停用代理</button>';
         document.getElementById('closedUpProxy').addEventListener('click', closedUpProxy);
@@ -116,4 +118,26 @@ function detailed() {
     });
 }
 
+function textInit(e) {
+    e.preventDefault();
+    var text;
+    var clp = (e.originalEvent || e).clipboardData;
+    if (clp === undefined || clp === null) {
+        text = window.clipboardData.getData("text") || "";
+        if (text !== "") {
+            if (window.getSelection) {
+                var newNode = document.createElement("span");
+                newNode.innerHTML = text;
+                window.getSelection().getRangeAt(0).insertNode(newNode);
+            } else {
+                document.selection.createRange().pasteHTML(text);
+            }
+        }
+    } else {
+        text = clp.getData('text/plain') || "";
+        if (text !== "") {
+            document.execCommand('insertText', false, text);
+        }
+    }
+}
 

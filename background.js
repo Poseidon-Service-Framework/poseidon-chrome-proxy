@@ -1,10 +1,8 @@
 var proxyObj;
 
 async function setHeaders() {
-
-    const {proxyJson} = await getValue("proxyJson");
+    chrome.webRequest.onBeforeSendHeaders.removeListener(addheaders);
     const {proxyState} = await getValue("proxyState");
-    proxyObj = JSON.parse(proxyJson);
     if (proxyState == 1) {
         chrome.webRequest.onBeforeSendHeaders.addListener(
             addheaders,
@@ -12,19 +10,11 @@ async function setHeaders() {
             ["requestHeaders", "blocking"]
         );
     } else {
-        chrome.webRequest.onBeforeSendHeaders.removeListener(addheaders);
         console.log("代理关闭，忽略请求头设置");
     }
 
 }
 
-function removeHead(head, name) {
-    for (var i = 0; i < head.length; i++) {
-        if (head[i].name == name) {
-            head.splice(i, 1);
-        }
-    }
-}
 
 function addheaders(details) {
     var headers = details.requestHeaders;
@@ -34,6 +24,9 @@ function addheaders(details) {
         const header = headers[index];
         indexMap[header.name.toLowerCase()] = index;
     }
+    if (!proxyObj) {
+        return;
+    }
     for (var i = 0; i < proxyObj.length; i++) {
         var json = proxyObj[i]
         if (targetUrl.indexOf(json.domain) != -1) {
@@ -41,7 +34,7 @@ function addheaders(details) {
                 var arr = json.requestHeader[j].split(":");
                 const normalizedHeaderName = arr[0].toLowerCase();
                 const index = indexMap[normalizedHeaderName];
-                console.log(">>>>  "+JSON.stringify(arr));
+                console.log(">>>>  " + JSON.stringify(arr));
                 if (index !== undefined) {
                     headers[index].value = arr[1];
                 } else {
@@ -85,7 +78,12 @@ async function setProxy() {
     var pacScr = `function FindProxyForURL(url, host) { `
     const {proxyJson} = await getValue("proxyJson");
     const {proxyState} = await getValue("proxyState");
-    var proxyObj = JSON.parse(proxyJson);
+    try {
+        proxyObj = JSON.parse(proxyJson);
+    } catch (error) {
+        console.log(error)
+        return
+    }
     if (proxyState == 1) {
         for (var i = 0; i < proxyObj.length; i++) {
             var json = proxyObj[i]
@@ -119,7 +117,7 @@ async function setProxy() {
 }
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
-    console.log("监听配置改变更新代理")
+    console.log("监听配置改变更新代理");
     setProxy();
     setHeaders();
 });
