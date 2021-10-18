@@ -79,3 +79,7 @@
 如我访问 http://dev.100yx.net/message/msgApi/test 会被代理到 http://127.0.0.1:9020/message/msgApi/test 
 请求头中会包含信息 test:xxxxxxxxxx。
 dev.200yx.net 同理。
+
+# 功能预定
+
+- 修改响应头
