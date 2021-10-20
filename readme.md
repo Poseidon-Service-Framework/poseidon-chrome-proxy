@@ -80,6 +80,7 @@
 请求头中会包含信息 test:xxxxxxxxxx。
 dev.200yx.net 同理。
 
-# 功能预定
 
-- 修改响应头
+## 有小伙伴配置代理不生效，可以把 json 和版本号评论在下面issue
+
+https://github.com/Poseidon-Service-Framework/poseidon-chrome-proxy/issues/5
