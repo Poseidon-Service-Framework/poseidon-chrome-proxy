@@ -74,11 +74,11 @@
 ```
 
 点击json代码说明可查看字段含义。示例中是对两个域名 xx.xx.net 和 xx.xxxx.net 进行了代理；
-凡是通过浏览器访问 http://xx.xx.net/message/msgApi 开头的请求都会被代理到127.0.0.1:9020这个端口上去；
+凡是通过浏览器访问 http://xx.xx.net/xxx/xxx 开头的请求都会被代理到127.0.0.1:9020这个端口上去；
 并且会添加请求头 test:xxxxxxxxxx。
-如我访问 http://xx.xxxx.net/message/msgApi/test 会被代理到 http://127.0.0.1:9020/xxxx/test 
+如我访问 http://xx.xx.net/xxx/xxx/test 会被代理到 http://127.0.0.1:9020/xxx/xxx/test 
 请求头中会包含信息 test:xxxxxxxxxx。
-dev.200yx.net 同理。
+xx.xxxx.net  同理。
 
 
 ## 有小伙伴配置代理不生效，可以把 json 和版本号评论在下面issue
