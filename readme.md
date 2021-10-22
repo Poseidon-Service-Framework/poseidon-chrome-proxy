@@ -51,7 +51,7 @@
 ```json 
 [
   {
-    "domain": "dev.100yx.net",
+    "domain": "xx.xx.net",
     "requestHeader": ["test:xxxxxxxxxx"],
     "matchingRules": [
       {
@@ -60,7 +60,7 @@
       }
     ]
   },  {
-    "domain": "dev.200yx.net",
+    "domain": "xx.xxxx.net",
     "requestHeader": ["test:8888"],
     "matchingRules": [
       {
@@ -73,10 +73,10 @@
 
 ```
 
-点击json代码说明可查看字段含义。示例中是对两个域名 dev.100yx.net 和 dev.200yx.net 进行了代理；
-凡是通过浏览器访问 http://dev.100yx.net/message/msgApi 开头的请求都会被代理到127.0.0.1:9020这个端口上去；
+点击json代码说明可查看字段含义。示例中是对两个域名 xx.xx.net 和 xx.xxxx.net 进行了代理；
+凡是通过浏览器访问 http://xx.xx.net/message/msgApi 开头的请求都会被代理到127.0.0.1:9020这个端口上去；
 并且会添加请求头 test:xxxxxxxxxx。
-如我访问 http://dev.100yx.net/message/msgApi/test 会被代理到 http://127.0.0.1:9020/message/msgApi/test 
+如我访问 http://xx.xxxx.net/message/msgApi/test 会被代理到 http://127.0.0.1:9020/xxxx/test 
 请求头中会包含信息 test:xxxxxxxxxx。
 dev.200yx.net 同理。
 
