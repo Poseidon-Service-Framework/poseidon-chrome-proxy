@@ -43,6 +43,7 @@ function getCodeJson() {
     for (var i = 0; i < codelist.length; i++) {
         json += codelist[i].innerHTML;
     }
+    json = json.replaceAll("<br>","");
     JSON.parse(json);
     return json;
 }
