@@ -84,3 +84,11 @@ xx.xxxx.net  同理。
 ## 有小伙伴配置代理不生效，可以把 json 和版本号评论在下面issue
 
 https://github.com/Poseidon-Service-Framework/poseidon-chrome-proxy/issues/5
+
+**代理失效的情况**
+
+1. 浏览器缓存导致无法代理，暂时的解决办法：
+https://blog.csdn.net/weixin_46544385/article/details/110094588
+
+2. 代理的ip:端口网络不通导致代理失效，解决办法：
+确保ip:端口能访问后重新关闭然后开启代理
